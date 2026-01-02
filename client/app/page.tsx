@@ -30,18 +30,19 @@ export default function Home() {
     setSearching(true);
     setSearchResult(null);
 
-    // We use a free AI Image generator to guarantee an image every time
-    // No API Key needed!
     const cleanQuery = searchQuery.trim();
-    const aiImage = `https://image.pollinations.ai/prompt/cinematic%20travel%20photo%20of%20${encodeURIComponent(cleanQuery)}%20landmark%20sunset%204k?width=800&height=600&nologo=true`;
+    
+    // ✅ NEW SOURCE: LoremFlickr (Much more reliable than Pollinations)
+    // It gives a real photo of the city immediately.
+    const cityImage = `https://loremflickr.com/800/600/${encodeURIComponent(cleanQuery)},landmark/all`;
 
     setTimeout(() => {
       setSearchResult({
         name: cleanQuery,
-        img: aiImage
+        img: cityImage
       });
       setSearching(false);
-    }, 1500); // Small fake delay to feel like "searching"
+    }, 1500);
   };
 
   // --- FUNCTION: AUTO PLANNER ---
@@ -110,7 +111,7 @@ export default function Home() {
         </Swiper>
       </section>
 
-      {/* 2. SEARCH SECTION (With AI Image Fix) */}
+      {/* 2. SEARCH SECTION */}
       <section className="relative -mt-10 z-20 px-6 max-w-4xl mx-auto mb-20">
         <div className="bg-zinc-900/90 backdrop-blur-md p-6 rounded-2xl border border-white/10 shadow-2xl">
           <form onSubmit={handleSearch} className="flex gap-4">
@@ -177,7 +178,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. PRICING / SUBSCRIPTION (With ICONS!) */}
+      {/* 5. PRICING / SUBSCRIPTION (With Icons) */}
       <section className="py-24 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4">CHOOSE YOUR GUIDE</h2>
@@ -201,7 +202,7 @@ export default function Home() {
             <button className="w-full py-3 border border-white/20 rounded-xl font-bold hover:bg-white/10 transition">Get Started</button>
           </div>
 
-          {/* Pro Tier (Highlighted) */}
+          {/* Pro Tier */}
           <div className="bg-zinc-900 border border-teal-500 p-8 rounded-2xl transform scale-105 shadow-[0_0_30px_rgba(20,184,166,0.2)] relative flex flex-col">
             <div className="absolute top-0 right-0 bg-teal-500 text-black text-xs font-bold px-3 py-1 rounded-bl-lg uppercase">Most Popular</div>
             <div className="w-12 h-12 bg-teal-500/20 rounded-full flex items-center justify-center mb-4">
@@ -214,7 +215,6 @@ export default function Home() {
               <li>✓ Unlimited AI Guides</li>
               <li>✓ Unlimited Auto-Plans</li>
               <li className="flex items-center gap-2">
-                 {/* Small Speaker Icon */}
                  <svg className="w-4 h-4 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
                  <span className="text-teal-400 font-bold">Smart Audio Tours</span>
               </li>
@@ -226,7 +226,7 @@ export default function Home() {
           {/* VIP Tier */}
           <div className="bg-black border border-purple-500/50 p-8 rounded-2xl hover:border-purple-500 transition flex flex-col">
             <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mb-4">
-               {/* Icon: Crown/Star */}
+               {/* Icon: Crown */}
                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
             </div>
             <h3 className="text-xl font-bold text-purple-400 mb-2">Globetrotter</h3>
