@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
  "scripts": {
-  "build": "echo 'No build step needed'",
-  "start": "npx ts-node src/server.ts",
+  "build": "echo 'No build needed'",
+  "start": "npx ts-node --transpile-only src/server.ts", 
   "dev": "nodemon src/server.ts"
 },
   "keywords": [],
