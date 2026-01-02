@@ -23,26 +23,46 @@ export default function Home() {
   const [searchResult, setSearchResult] = useState<{name: string, img: string} | null>(null);
   const [searching, setSearching] = useState(false);
 
-  // --- FUNCTION: SEARCH LOCATION (FIXED) ---
+  // --- FUNCTION: SEARCH LOCATION (The Professional Fix) ---
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery) return;
     setSearching(true);
     setSearchResult(null);
 
-    const cleanQuery = searchQuery.trim();
-    
-    // ✅ NEW SOURCE: LoremFlickr (Much more reliable than Pollinations)
-    // It gives a real photo of the city immediately.
-    const cityImage = `https://loremflickr.com/800/600/${encodeURIComponent(cleanQuery)},landmark/all`;
+    try {
+      // 1. Get the Key from Environment Variables
+      const unsplashKey = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
 
-    setTimeout(() => {
-      setSearchResult({
-        name: cleanQuery,
-        img: cityImage
+      // 2. Call Unsplash API directly
+      const response = await axios.get(`https://api.unsplash.com/search/photos`, {
+        params: {
+          query: searchQuery,
+          per_page: 1,
+          orientation: 'landscape',
+          client_id: unsplashKey // This authorizes the request
+        }
       });
+
+      // 3. Extract the high-quality image URL
+      const image = response.data.results[0]?.urls?.regular || 
+                    "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800"; // Fallback if no image found
+
+      setSearchResult({
+        name: searchQuery,
+        img: image
+      });
+
+    } catch (err) {
+      console.error("Unsplash Error:", err);
+      // Fallback image so the UI never breaks
+      setSearchResult({
+        name: searchQuery,
+        img: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800"
+      });
+    } finally {
       setSearching(false);
-    }, 1500);
+    }
   };
 
   // --- FUNCTION: AUTO PLANNER ---
@@ -111,7 +131,7 @@ export default function Home() {
         </Swiper>
       </section>
 
-      {/* 2. SEARCH SECTION */}
+      {/* 2. SEARCH SECTION (API FIXED) */}
       <section className="relative -mt-10 z-20 px-6 max-w-4xl mx-auto mb-20">
         <div className="bg-zinc-900/90 backdrop-blur-md p-6 rounded-2xl border border-white/10 shadow-2xl">
           <form onSubmit={handleSearch} className="flex gap-4">
@@ -119,7 +139,7 @@ export default function Home() {
               type="text" 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Where do you want to go? (e.g. Tokyo)"
+              placeholder="Where do you want to go? (e.g. Goa)"
               className="w-full bg-black border border-white/10 p-4 rounded-xl text-white focus:border-teal-500 outline-none"
             />
             <button 
@@ -136,6 +156,7 @@ export default function Home() {
             <div className="mt-8 animate-fade-in-up">
               <h3 className="text-gray-400 text-sm uppercase tracking-widest mb-4">Top Result</h3>
               <div className="h-[400px] border border-teal-500/30 rounded-xl overflow-hidden shadow-[0_0_30px_rgba(20,184,166,0.2)]">
+                {/* We pass the REAL Unsplash URL here */}
                 <SmartDestination name={searchResult.name} initialImage={searchResult.img} />
               </div>
             </div>
@@ -178,7 +199,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. PRICING / SUBSCRIPTION (With Icons) */}
+      {/* 5. PRICING / SUBSCRIPTION */}
       <section className="py-24 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4">CHOOSE YOUR GUIDE</h2>
