@@ -21,7 +21,8 @@ export default function DestinationPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.post('http://localhost:5000/api/v1/ai/info', {
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const res = await axios.post(`${API_URL}/api/v1/ai/info`, {
           destination: destinationName
         });
         setAiData(res.data.data);

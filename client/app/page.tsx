@@ -25,7 +25,8 @@ export default function Home() {
     setPlan(null); // Reset previous plan
 
     try {
-      const res = await axios.post('http://localhost:5000/api/v1/ai/plan', {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const res = await axios.post(`${API_URL}/api/v1/ai/plan`, {
         budget,
         interests
       });
