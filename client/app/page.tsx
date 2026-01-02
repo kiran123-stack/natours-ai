@@ -23,33 +23,25 @@ export default function Home() {
   const [searchResult, setSearchResult] = useState<{name: string, img: string} | null>(null);
   const [searching, setSearching] = useState(false);
 
-  // --- FUNCTION: SEARCH LOCATION ---
+  // --- FUNCTION: SEARCH LOCATION (FIXED) ---
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery) return;
     setSearching(true);
     setSearchResult(null);
 
-    try {
-      // We use the Unsplash API directly or via your backend to get an image
-      // For simplicity, we'll use a direct Unsplash Source URL which redirects to a valid image
-      const imgUrl = `https://source.unsplash.com/1600x900/?${encodeURIComponent(searchQuery)},travel`;
-      
-      // We set a small timeout to simulate "finding" the best spot
-      setTimeout(() => {
-        setSearchResult({
-          name: searchQuery,
-          // Fallback image logic or direct unsplash search
-          img: `https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=800&q=80` // Default fallback if dynamic fails, 
-          // but in real app you'd fetch a real URL. For now let's use the dynamic source trick:
-        });
-        setSearching(false);
-      }, 1000);
+    // We use a free AI Image generator to guarantee an image every time
+    // No API Key needed!
+    const cleanQuery = searchQuery.trim();
+    const aiImage = `https://image.pollinations.ai/prompt/cinematic%20travel%20photo%20of%20${encodeURIComponent(cleanQuery)}%20landmark%20sunset%204k?width=800&height=600&nologo=true`;
 
-    } catch (err) {
-      alert("Could not find location");
+    setTimeout(() => {
+      setSearchResult({
+        name: cleanQuery,
+        img: aiImage
+      });
       setSearching(false);
-    }
+    }, 1500); // Small fake delay to feel like "searching"
   };
 
   // --- FUNCTION: AUTO PLANNER ---
@@ -66,7 +58,7 @@ export default function Home() {
       });
       setPlan(res.data.data);
     } catch (err) {
-      alert("AI Connect Failed");
+      alert("AI Connect Failed. Make sure Backend is running!");
     } finally {
       setLoadingPlan(false);
     }
@@ -118,7 +110,7 @@ export default function Home() {
         </Swiper>
       </section>
 
-      {/* 2. SEARCH SECTION (New) */}
+      {/* 2. SEARCH SECTION (With AI Image Fix) */}
       <section className="relative -mt-10 z-20 px-6 max-w-4xl mx-auto mb-20">
         <div className="bg-zinc-900/90 backdrop-blur-md p-6 rounded-2xl border border-white/10 shadow-2xl">
           <form onSubmit={handleSearch} className="flex gap-4">
@@ -126,7 +118,7 @@ export default function Home() {
               type="text" 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Where do you want to go? (e.g. Venice)"
+              placeholder="Where do you want to go? (e.g. Tokyo)"
               className="w-full bg-black border border-white/10 p-4 rounded-xl text-white focus:border-teal-500 outline-none"
             />
             <button 
@@ -134,7 +126,7 @@ export default function Home() {
               disabled={searching}
               className="bg-teal-500 hover:bg-teal-400 text-black font-bold px-8 rounded-xl transition disabled:opacity-50"
             >
-              {searching ? '🔍' : 'Search'}
+              {searching ? 'Loading...' : 'Search'}
             </button>
           </form>
 
@@ -142,9 +134,8 @@ export default function Home() {
           {searchResult && (
             <div className="mt-8 animate-fade-in-up">
               <h3 className="text-gray-400 text-sm uppercase tracking-widest mb-4">Top Result</h3>
-              <div className="h-[400px]">
-                {/* We reuse your SmartDestination component so it has AI powers! */}
-                <SmartDestination name={searchResult.name} initialImage={`https://source.unsplash.com/800x600/?${encodeURIComponent(searchResult.name)}`} />
+              <div className="h-[400px] border border-teal-500/30 rounded-xl overflow-hidden shadow-[0_0_30px_rgba(20,184,166,0.2)]">
+                <SmartDestination name={searchResult.name} initialImage={searchResult.img} />
               </div>
             </div>
           )}
@@ -167,7 +158,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. STATISTICS SECTION (New) */}
+      {/* 4. STATISTICS SECTION */}
       <section className="py-20 bg-zinc-900 border-y border-white/10">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
@@ -186,7 +177,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. PRICING / SUBSCRIPTION (New) */}
+      {/* 5. PRICING / SUBSCRIPTION (With ICONS!) */}
       <section className="py-24 px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4">CHOOSE YOUR GUIDE</h2>
@@ -195,50 +186,58 @@ export default function Home() {
 
         <div className="grid md:grid-cols-3 gap-8">
           {/* Free Tier */}
-          <div className="bg-black border border-white/10 p-8 rounded-2xl hover:border-white/30 transition">
+          <div className="bg-black border border-white/10 p-8 rounded-2xl hover:border-white/30 transition flex flex-col">
+            <div className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center mb-4">
+               {/* Icon: Compass */}
+               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
+            </div>
             <h3 className="text-xl font-bold text-gray-400 mb-2">Explorer</h3>
             <div className="text-4xl font-black text-white mb-6">Free</div>
-            <ul className="space-y-4 text-sm text-gray-400 mb-8">
+            <ul className="space-y-4 text-sm text-gray-400 mb-8 flex-1">
               <li>✓ Basic AI Guides</li>
               <li>✓ 3 Itineraries per month</li>
               <li>✓ Community Support</li>
             </ul>
-            <button className="w-full py-3 border border-white/20 rounded-xl font-bold hover:bg-white/10 transition">
-              Get Started
-            </button>
+            <button className="w-full py-3 border border-white/20 rounded-xl font-bold hover:bg-white/10 transition">Get Started</button>
           </div>
 
           {/* Pro Tier (Highlighted) */}
-          <div className="bg-zinc-900 border border-teal-500 p-8 rounded-2xl transform scale-105 shadow-[0_0_30px_rgba(20,184,166,0.2)] relative">
-            <div className="absolute top-0 right-0 bg-teal-500 text-black text-xs font-bold px-3 py-1 rounded-bl-lg uppercase">
-              Most Popular
+          <div className="bg-zinc-900 border border-teal-500 p-8 rounded-2xl transform scale-105 shadow-[0_0_30px_rgba(20,184,166,0.2)] relative flex flex-col">
+            <div className="absolute top-0 right-0 bg-teal-500 text-black text-xs font-bold px-3 py-1 rounded-bl-lg uppercase">Most Popular</div>
+            <div className="w-12 h-12 bg-teal-500/20 rounded-full flex items-center justify-center mb-4">
+               {/* Icon: Map/Globe */}
+               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
             <h3 className="text-xl font-bold text-teal-400 mb-2">Adventurer</h3>
             <div className="text-4xl font-black text-white mb-6">$19<span className="text-lg font-normal text-gray-500">/mo</span></div>
-            <ul className="space-y-4 text-sm text-gray-300 mb-8">
+            <ul className="space-y-4 text-sm text-gray-300 mb-8 flex-1">
               <li>✓ Unlimited AI Guides</li>
               <li>✓ Unlimited Auto-Plans</li>
-              <li>✓ <span className="text-teal-400 font-bold">Smart Audio Tours</span></li>
+              <li className="flex items-center gap-2">
+                 {/* Small Speaker Icon */}
+                 <svg className="w-4 h-4 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
+                 <span className="text-teal-400 font-bold">Smart Audio Tours</span>
+              </li>
               <li>✓ Offline Access</li>
             </ul>
-            <button className="w-full py-3 bg-teal-500 text-black rounded-xl font-bold hover:bg-teal-400 transition">
-              Upgrade Now
-            </button>
+            <button className="w-full py-3 bg-teal-500 text-black rounded-xl font-bold hover:bg-teal-400 transition">Upgrade Now</button>
           </div>
 
           {/* VIP Tier */}
-          <div className="bg-black border border-purple-500/50 p-8 rounded-2xl hover:border-purple-500 transition">
+          <div className="bg-black border border-purple-500/50 p-8 rounded-2xl hover:border-purple-500 transition flex flex-col">
+            <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mb-4">
+               {/* Icon: Crown/Star */}
+               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+            </div>
             <h3 className="text-xl font-bold text-purple-400 mb-2">Globetrotter</h3>
             <div className="text-4xl font-black text-white mb-6">$49<span className="text-lg font-normal text-gray-500">/mo</span></div>
-            <ul className="space-y-4 text-sm text-gray-400 mb-8">
+            <ul className="space-y-4 text-sm text-gray-400 mb-8 flex-1">
               <li>✓ Everything in Adventurer</li>
               <li>✓ <span className="text-purple-400 font-bold">Live Human Concierge</span></li>
               <li>✓ VIP Hotel Booking</li>
               <li>✓ 24/7 Priority Support</li>
             </ul>
-            <button className="w-full py-3 border border-purple-500/50 text-purple-400 rounded-xl font-bold hover:bg-purple-500/10 transition">
-              Go VIP
-            </button>
+            <button className="w-full py-3 border border-purple-500/50 text-purple-400 rounded-xl font-bold hover:bg-purple-500/10 transition">Go VIP</button>
           </div>
         </div>
       </section>
