@@ -8,7 +8,7 @@
 ---
 
 ## 🚀 Live Demo
-**Frontend (Vercel):** [https://natours-ai.vercel.app](https://natours-ai.vercel.app)  
+**Frontend (Vercel):** [https://natours-ai.vercel.app](https://natours-ai.vercel.app/)  
 **Backend API (Render):** [https://natours-backend.onrender.com](https://natours-backend.onrender.com)
 
 *(Note: The backend runs on a free instance and may take 30s to wake up on the first request.)*
