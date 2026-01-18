@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation'; // Use Next.js Router
 
-interface SmartDestinationProps {
+interface SmartDestinationProps {   // this tells what data is component needs it means in this we need place name and image 
   name: string;
   initialImage: string;
 }
