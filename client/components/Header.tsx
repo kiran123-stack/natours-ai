@@ -13,7 +13,7 @@ export default function Header() {
         {/* Desktop Tabs */}
         <div className="hidden md:flex gap-8 text-sm font-medium tracking-wide">
           <Link href="/" className="hover:text-teal-400 transition">Home</Link>
-          <a href="#tours" className="hover:text-teal-400 transition">Destinations</a>
+          <a href="#destination" className="hover:text-teal-400 transition">Destinations</a>
           <a href="#autoplan" className="hover:text-teal-400 transition">Auto-Plan</a>
         </div>
 
