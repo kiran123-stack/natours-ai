@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="bg-black border-t border-white/10 pt-16 pb-8 text-white">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+        <div className="grid grid-cols-[repeat(autofit,minmax(200px,1fr))] gap-12 mb-16">
           
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
