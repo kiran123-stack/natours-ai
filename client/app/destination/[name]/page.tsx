@@ -1,21 +1,21 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';    // used to read url data
 import axios from 'axios';
 import Header from '../../../components/Header';
 import Image from 'next/image';
 
 export default function DestinationPage() {
-  const params = useParams();
-  const searchParams = useSearchParams();
+  const params = useParams();   //used to read dynamic  route value
+  const searchParams = useSearchParams(); // used to read query string vlaue like image in url
   const destinationName = decodeURIComponent(params.name as string);
   const bgImage = searchParams.get('img') || '';
 
-  const [aiData, setAiData] = useState<any>(null);
+  const [aiData, setAiData] = useState<any>(null); //any used so ai can give any type data as an response as number strings etc
   const [loading, setLoading] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [currentSentenceIndex, setCurrentSentenceIndex] = useState(-1);
+  const [currentSentenceIndex, setCurrentSentenceIndex] = useState(-1);// it is used for track sentence from complete begining not from 0 index
 
   // FETCH AI DATA
   useEffect(() => {
@@ -47,15 +47,15 @@ const res = await axios.post(`${API_URL}/api/v1/ai/info`, {
       let sentenceIndex = 0;
 
       const speakNextSentence = () => {
-        if (sentenceIndex >= sentences.length) {
+        if (sentenceIndex >= sentences.length) {  
           setIsSpeaking(false);
           setCurrentSentenceIndex(-1);
           return;
         }
 
-        const utterance = new SpeechSynthesisUtterance(sentences[sentenceIndex]);
+        const utterance = new SpeechSynthesisUtterance(sentences[sentenceIndex]); //to make ai speek this is a browser pre-built feature
         utterance.rate = 1; // Speed
-        utterance.pitch = 1;
+        utterance.pitch = 1;//voice tone
         
         // When this sentence starts, highlight it
         utterance.onstart = () => setCurrentSentenceIndex(sentenceIndex);
