@@ -97,8 +97,8 @@ npm run dev
 Your app should now be running at http://localhost:3000! 🚀
 
 📸 Screenshots
-<img width="1341" height="635" alt="image" src="https://github.com/user-attachments/assets/faa171b7-397c-449f-a6b2-8be1344b9ac7" />
-<img width="1285" height="393" alt="image" src="https://github.com/user-attachments/assets/6ab9b4dd-7157-4fc0-a315-5f5cfd631946" />
+<img width="1341" height="635" alt="image" src="https://github.com/user-attachments/assets/faa171b7-397c-449f-a6b2-8be1344b9ac7"/>
+<img width="1285" height="393" alt="image" src="https://github.com/user-attachments/assets/6ab9b4dd-7157-4fc0-a315-5f5cfd631946"/>
 
 🤝 Contributing
 Contributions are welcome!
