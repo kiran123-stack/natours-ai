@@ -165,7 +165,7 @@ export default function Home() {
       </section>
 
       {/* 3. GALLERY GRID */}
-      <section className="py-10 px-6 max-w-7xl mx-auto">
+      <section id="destination" className="py-10 px-6 max-w-7xl mx-auto">
         <div className="flex justify-between items-end mb-10">
           <h2 className="text-4xl font-thin">TRENDING <span className="font-bold text-teal-500">NOW</span></h2>
           <span className="text-gray-500 text-sm uppercase tracking-widest">Explore All</span>
