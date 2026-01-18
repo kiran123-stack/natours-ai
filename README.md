@@ -46,7 +46,7 @@ Experience the world before you fly.
 - **Framework:** Next.js 14 (App Router)
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS
-- **Animations:** GSAP, Framer Motion
+- **Animations:** GSAP
 - **State Management:** React Hooks
 - **HTTP Client:** Axios
 
