@@ -20,7 +20,7 @@ export default function RootLayout({
       <body className={inter.className}>
         {/* Use the wrapper here. It handles the client-side logic safely. */}
         <SmoothScrollProvider>
-          {children}     {/*applying smooth scrolling to whole website}
+          {children}     {/*applying smooth scrolling to whole website. */}
         </SmoothScrollProvider>
       </body>
     </html>
