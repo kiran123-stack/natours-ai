@@ -37,7 +37,7 @@ useEffect(() => {
   }
 }, []);
 
-  if (!isAuthenticated) return <div className="bg-black min-h-screen" />;;
+  if (!isAuthenticated) return <div className="bg-black min-h-screen" />;
 
   // --- STATE FOR SEARCH BAR ---
 
