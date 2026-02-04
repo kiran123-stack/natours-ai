@@ -25,7 +25,7 @@ export default function LoginPage() {
 
       if (res.data.status === 'success') {
         // Save the token (basic way)
-        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('auth_token', res.data.token);
         alert("Login Successful! Welcome back.");
         router.push('/'); // Go back home
       }
