@@ -40,7 +40,8 @@ export default function SignupPage() {
     try {
       // 4. Send Data to Backend
       // Notice we send exactly what your Schema expects: name, email, password, passwordConfirm
-      const res = await axios.post('http://localhost:5000/api/v1/users/signup', formData);
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+     const res = await axios.post(`${API_URL}/api/v1/users/login`, formData);
 
       if (res.data.status === 'success') {
         alert("Account created successfully! Please log in.");
