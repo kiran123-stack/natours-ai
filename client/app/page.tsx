@@ -30,7 +30,7 @@ useEffect(() => {
   }
 }, []);
 
-  if (!isAuthenticated) return null;
+  if (!isAuthenticated) return if (!isAuthenticated) return <div className="bg-black min-h-screen" />;;
 
   // --- STATE FOR SEARCH BAR ---
   const [searchQuery, setSearchQuery] = useState('');
