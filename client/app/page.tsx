@@ -18,6 +18,20 @@ export default function Home() {
   const [plan, setPlan] = useState<any>(null);
   const [loadingPlan, setLoadingPlan] = useState(false);
 
+  const router = useRouter();
+const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+useEffect(() => {
+  const token = localStorage.getItem('auth_token'); // Ensure this matches your Login page key
+  if (!token) {
+    router.push('/login'); 
+  } else {
+    setIsAuthenticated(true);
+  }
+}, []);
+
+  if (!isAuthenticated) return null;
+
   // --- STATE FOR SEARCH BAR ---
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResult, setSearchResult] = useState<{name: string, img: string} | null>(null);
