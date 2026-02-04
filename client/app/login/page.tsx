@@ -19,7 +19,7 @@ export default function LoginPage() {
 
     try {
        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-     const res = await axios.post(`${API_URL}/api/auth/login`, {
+     const res = await axios.post(`${API_URL}/api/v1/users/login`, {
         email,
         password
       });
