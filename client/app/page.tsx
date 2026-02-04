@@ -13,14 +13,20 @@ import 'swiper/css/pagination';
 import SmartDestination from './SmartDestination';
 
 export default function Home() {
+   const router = useRouter();
+  
   // --- STATE FOR AUTO PLANNER ---
   const [budget, setBudget] = useState('');
   const [interests, setInterests] = useState('');
   const [plan, setPlan] = useState<any>(null);
   const [loadingPlan, setLoadingPlan] = useState(false);
 
-  const router = useRouter();
+ 
 const [isAuthenticated, setIsAuthenticated] = useState(false);
+const [searchQuery, setSearchQuery] = useState('');
+const [searchResult, setSearchResult] = useState<{name: string, img: string} | null>(null);
+const [searching, setSearching] = useState(false);
+
 
 useEffect(() => {
   const token = localStorage.getItem('auth_token'); // Ensure this matches your Login page key
@@ -31,12 +37,9 @@ useEffect(() => {
   }
 }, []);
 
-   if (!isAuthenticated) return <div className="bg-black min-h-screen" />;;
+  if (!isAuthenticated) return <div className="bg-black min-h-screen" />;;
 
   // --- STATE FOR SEARCH BAR ---
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResult, setSearchResult] = useState<{name: string, img: string} | null>(null);
-  const [searching, setSearching] = useState(false);
 
   // --- FUNCTION: SEARCH LOCATION (The Professional Fix) ---
   const handleSearch = async (e: React.FormEvent) => {
