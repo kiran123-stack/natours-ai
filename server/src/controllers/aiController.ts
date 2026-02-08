@@ -15,6 +15,7 @@ export const getDestinationInfo = async (req: Request, res: Response) => {
     // 1. AI Request
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
     const prompt = `
+    act as a senior tour planner
       Give me a JSON summary for "${destination}":
       { "summary": "2 sentences", "bestTime": "Season", "localDish": "Food name","topAttractions": ["attraction1", "attraction2", "attraction3"] }
       No markdown.
