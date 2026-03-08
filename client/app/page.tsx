@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react'; 
-import { useRouter } from 'next/navigation';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -13,7 +12,7 @@ import 'swiper/css/pagination';
 import SmartDestination from './SmartDestination';
 
 export default function Home() {
-   const router = useRouter();
+   
   
   // --- STATE FOR AUTO PLANNER ---
   const [budget, setBudget] = useState('');
@@ -22,22 +21,14 @@ export default function Home() {
   const [loadingPlan, setLoadingPlan] = useState(false);
 
  
-const [isAuthenticated, setIsAuthenticated] = useState(false);
 const [searchQuery, setSearchQuery] = useState('');
 const [searchResult, setSearchResult] = useState<{name: string, img: string} | null>(null);
 const [searching, setSearching] = useState(false);
 
 
-useEffect(() => {
-  const token = localStorage.getItem('auth_token'); // Ensure this matches your Login page key
-  if (!token) {
-    router.push('/login'); 
-  } else {
-    setIsAuthenticated(true);
-  }
-}, []);
 
-  if (!isAuthenticated) return <div className="bg-black min-h-screen" />;
+
+
 
   // --- STATE FOR SEARCH BAR ---
 
