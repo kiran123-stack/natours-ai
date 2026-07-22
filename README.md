@@ -102,23 +102,24 @@ Your app should now be running at http://localhost:3000! 🚀
 
 <img width="1285" alt="image" src="https://github.com/user-attachments/assets/6ab9b4dd-7157-4fc0-a315-5f5cfd631946" />
 
-## 🛠️ Incident Report: Production Deployment Troubleshooting
+🛠️ Incident Report: Production Deployment Troubleshooting
+The Issue
+After months of stable operation, the production backend hosted on Render suddenly began failing on boot with a DNS resolution error: Error: querySrv ENOTFOUND _mongodb._tcp.cluster0.dxxfttn.mongodb.net.
 
-## The Issue
-After months of stable operation, the production backend hosted on Render suddenly began failing on boot with a DNS resolution error: `Error: querySrv ENOTFOUND _mongodb._tcp.cluster0.dxxfttn.mongodb.net`. 
-
-##  Debugging Process & Hypotheses
+Debugging Process & Hypotheses
 When troubleshooting this outage, I systematically isolated the variables across the frontend, the deployment pipeline, and the database infrastructure:
-1. **Network Requests (CORS):** Initially observed failed frontend data fetches. Verified that the Express `cors` middleware was correctly configured to accept requests from the production origin, ruling out browser security blocks.
-2. **Build Environment Dependencies:** Investigated a secondary `ts-node` crash (`TypeError: Cannot read properties of undefined`) during the Render build phase. Solved this by overriding the default production constraints using the `npm install --include=dev` command, ensuring the TypeScript compiler was available in the deployment pipeline.
-3. **Environment Variables:** Noticed logs indicating 0 environment variables loaded from `.env`. Confirmed that Render securely injects these at runtime independently of the local file, ruling out missing credentials.
 
-###  Root Cause & Resolution
-The root cause was entirely infrastructure-based. Because the database is hosted on a free-tier MongoDB Atlas cluster, the service automatically paused the instance after 60 days of inactivity to conserve resources. This action brought down the DNS routes, resulting in the `ENOTFOUND` error whenever Render attempted to connect. 
+Network Requests (CORS): Initially observed failed frontend data fetches. Verified that the Express cors middleware was correctly configured to accept requests from the production origin, ruling out browser security blocks.
 
-###  The Fix 
+Build Environment Dependencies: Investigated a secondary ts-node crash (TypeError: Cannot read properties of undefined) during the Render build phase. Solved this by overriding the default production constraints using the npm install --include=dev command, ensuring the TypeScript compiler was available in the deployment pipeline.
+
+Environment Variables: Noticed logs indicating 0 environment variables loaded from .env. Confirmed that Render securely injects these at runtime independently of the local file, ruling out missing credentials.
+
+Root Cause & Resolution
+The root cause was entirely infrastructure-based. Because the database is hosted on a free-tier MongoDB Atlas cluster, the service automatically paused the instance after 60 days of inactivity to conserve resources. This action brought down the DNS routes, resulting in the ENOTFOUND error whenever Render attempted to connect.
+
+The Fix
 Navigated to the MongoDB Atlas dashboard and manually resumed the sleeping cluster. The server immediately reconnected. This incident underscored the critical importance of understanding cloud infrastructure, platform lifecycles, and third-party service limitations in full-stack architecture.
-
 
 🤝 Contributing
 Contributions are welcome!
