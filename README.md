@@ -118,6 +118,8 @@ The root cause was entirely infrastructure-based. Because the database is hosted
 
 ### The Fix 
 Navigated to the MongoDB Atlas dashboard and manually resumed the sleeping cluster. The server immediately reconnected. This incident underscored the critical importance of understanding cloud infrastructure, platform lifecycles, and third-party service limitations in full-stack architecture.
+
+
 🤝 Contributing
 Contributions are welcome!
 
