@@ -4,6 +4,50 @@ import axios from 'axios';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 
+const sleep = (ms: number) =>
+  new Promise(resolve => setTimeout(resolve, ms));
+
+const generateWithRetry = async (
+  model: any,
+  prompt: string,
+  retries = 3
+): Promise<any> => {
+  let lastError: any;
+
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      return await model.generateContent(prompt);
+
+    } catch (error: any) {
+      lastError = error;
+
+      const status = error?.status;
+
+      console.error(
+        `Gemini attempt ${attempt + 1} failed. Status:`,
+        status
+      );
+
+      if (
+        (status === 503 || status === 429) &&
+        attempt < retries - 1
+      ) {
+        const delay = 2000 * (attempt + 1);
+
+        console.log(
+          `Retrying Gemini in ${delay}ms...`
+        );
+
+        await sleep(delay);
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  throw lastError;
+};
+
 export const getDestinationInfo = async (req: Request, res: Response) => {
   try {
     const { destination } = req.body;
@@ -110,7 +154,11 @@ export const getTourPlan = async (req: Request, res: Response) => {
       }
     `;
 
-    const result = await model.generateContent(prompt);
+    const result = await generateWithRetry(
+      model,
+      prompt,
+      3
+    );
     
     // CLEANING THE RESPONSE (Crucial for stability)
     // Sometimes AI adds \`\`\`json at the start. We remove it.
